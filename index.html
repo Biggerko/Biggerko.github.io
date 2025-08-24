@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DAIL员工简介</title>
+  <meta name="description" content="一頁式極簡個人網站" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0c0f;            /* 背景 */
+      --panel: #111318;         /* 面板 */
+      --text: #e6e6e6;          /* 文字 */
+      --muted: #a3a3a3;         /* 次要文字 */
+      --brand: #8ab4ff;         /* 品牌色（低飽和）*/
+      --ring: rgba(138,180,255,.35);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --gap: clamp(16px, 3vw, 28px);
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f7f8fb; --panel:#ffffff; --text:#0d0e10; --muted:#606368; --brand:#0b5fff; --ring: rgba(11,95,255,.15); }
+      .bg-grid::before{ opacity:.15; }
+    }
+    * { box-sizing: border-box; }
+    html,body { height:100%; }
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, "SF Pro Text", Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color:var(--text); background: var(--bg);
+      line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+
+    /* 全域容器與網格背景 */
+    .wrap{ width:min(1120px, 92vw); margin:0 auto; }
+    .bg-grid{ position:relative; }
+    .bg-grid::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:-1;
+      background:
+        radial-gradient(1200px 600px at 70% -10%, rgba(11,95,255,.12), transparent 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(255,255,255,.06), transparent 50%);
+    }
+    .bg-grid::after{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; opacity:.05;
+      background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px);
+      background-size: 32px 32px; color:#fff;
+    }
+
+    /* 頂部導覽 */
+    header.nav{
+      position:sticky; top:0; backdrop-filter: saturate(180%) blur(14px);
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--text) 12%, transparent);
+      z-index:10; transition: all .3s ease;
+    }
+    .nav .bar{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; }
+    .brand{ display:flex; gap:10px; align-items:center; font-weight:700; letter-spacing:.3px; }
+    .brand .dot{ width:10px; height:10px; border-radius:50%; background: var(--brand); box-shadow: 0 0 0 6px var(--ring); }
+    .nav .links a{ color:var(--muted); text-decoration:none; margin-left:20px; font-weight:600; }
+    .nav .links a.active, .nav .links a:hover{ color:var(--text); }
+    .theme-btn{ border:1px solid color-mix(in oklab, var(--text) 18%, transparent); background:transparent; color:var(--text); padding:8px 12px; border-radius:999px; cursor:pointer; }
+
+    /* Hero 區塊 */
+    .hero{ padding: clamp(56px, 8vw, 120px) 0 36px; text-align:center; }
+    .kicker{ color:var(--muted); font-weight:600; letter-spacing:.2em; text-transform:uppercase; font-size:.8rem; }
+    .title{ font-size: clamp(32px, 6vw, 64px); line-height:1.1; margin:12px 0 16px; font-weight:800; }
+    .title .grad{ background: linear-gradient(135deg, var(--text) 0%, var(--brand) 90%); -webkit-background-clip: text; background-clip:text; color:transparent; }
+    .subtitle{ color:var(--muted); font-size: clamp(14px, 2.4vw, 18px); }
+    .cta{ margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn{ border:1px solid color-mix(in oklab, var(--text) 18%, transparent); padding:12px 18px; border-radius:12px; color:var(--text); text-decoration:none; display:inline-flex; align-items:center; gap:8px; font-weight:600; }
+    .btn.primary{ background: linear-gradient(180deg, color-mix(in oklab, var(--brand) 28%, #fff 0%), var(--brand)); border: none; color:#fff; box-shadow: var(--shadow); }
+
+    /* Section card */
+    section{ padding: clamp(36px, 6vw, 72px) 0; }
+    .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap); align-items: stretch; }
+    .card{ grid-column: span 12; background: var(--panel); border-radius: var(--radius); padding: clamp(16px, 3vw, 28px); box-shadow: var(--shadow); border:1px solid color-mix(in oklab, var(--text) 10%, transparent); }
+    .card h3{ margin:0 0 8px; font-size: clamp(18px, 2.6vw, 22px); }
+    .card p{ margin:0; color:var(--muted); }
+    .card.tall{ display:flex; flex-direction:column; justify-content:space-between; }
+
+    @media (min-width: 860px){
+      .card.span6{ grid-column: span 6; }
+      .card.span4{ grid-column: span 4; }
+    }
+
+    /* Footer */
+    footer{ padding:48px 0 72px; color:var(--muted); text-align:center; }
+
+    /* 動畫：進場與懸浮 */
+    .reveal{ opacity:0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.show{ opacity:1; transform:none; }
+    .hover-tilt{ transition: transform .2s ease; will-change: transform; }
+    .hover-tilt:hover{ transform: translateY(-2px) scale(1.01); }
+
+    /* 可及性：減少動效時停用複雜動畫 */
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ opacity:1 !important; transform:none !important; }
+      .hover-tilt, .hover-tilt:hover{ transform:none !important; }
+      .nav{ transition:none; }
+    }
+  </style>
+</head>
+<body class="bg-grid">
+  <header class="nav">
+    <div class="wrap bar">
+      <div class="brand"><span class="dot"></span> <span>My Minimal Site</span></div>
+      <nav class="links">
+        <a href="#about">關於</a>
+        <a href="#work">作品</a>
+        <a href="#contact">聯絡</a>
+        <button class="theme-btn" id="theme">外觀</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="kicker">Hello there</div>
+      <h1 class="title">我是 <span class="grad">DAIL沈大可</span>，
+        专注于前后端开发</h1>
+      <p class="subtitle">Every thing is possible</p>
+      <div class="cta">
+        <a class="btn primary" href="#work">浏览作品</a>
+        <a class="btn" href="#about">了解我</a>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap grid">
+        <article class="card span6 reveal hover-tilt">
+          <h3>关于我</h3>
+          <p>我熱愛以簡馭繁，專注設計系統、動效與可用性。擅長使用原生 Web 技術打造高質感互動。</p>
+        </article>
+        <article class="card span6 reveal hover-tilt">
+          <h3>能力領域</h3>
+          <p>前端工程、設計語言、動態交互、性能優化、可及性（a11y）、系統化設計。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="wrap grid">
+        <article class="card span4 reveal hover-tilt tall">
+          <div>
+            <h3>作品 A</h3>
+            <p>乾淨、流暢、以排印和間距為核心的單頁體驗。</p>
+          </div>
+          <a class="btn" href="#" aria-label="查看作品A">查看</a>
+        </article>
+        <article class="card span4 reveal hover-tilt tall">
+          <div>
+            <h3>作品 B</h3>
+            <p>細緻的過渡與層次，注重空氣感與可讀性。</p>
+          </div>
+          <a class="btn" href="#" aria-label="查看作品B">查看</a>
+        </article>
+        <article class="card span4 reveal hover-tilt tall">
+          <div>
+            <h3>作品 C</h3>
+            <p>專注於實用與一致性的設計系統落地。</p>
+          </div>
+          <a class="btn" href="#" aria-label="查看作品C">查看</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap grid">
+        <article class="card span12 reveal">
+          <h3>聯絡我</h3>
+          <p>Email：<a href="mailto:you@example.com">you@example.com</a>　·　GitHub：<a href="https://github.com/yourname" target="_blank" rel="noreferrer">@yourname</a></p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© <span id="year"></span> 某某 · Minimal & Humane Web</div>
+  </footer>
+
+  <script>
+    // 年份
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 觀察進場動畫
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); } }
+    }, { threshold: .15 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    // 導覽高亮
+    const sections = [...document.querySelectorAll('section[id]')];
+    const links = [...document.querySelectorAll('.nav .links a')];
+    const map = Object.fromEntries(links.map(a=>[a.getAttribute('href'), a]));
+    const hl = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        const id = '#' + e.target.id;
+        if(e.isIntersecting){
+          links.forEach(l=> l.classList.remove('active'));
+          map[id]?.classList.add('active');
+        }
+      })
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: .01});
+    sections.forEach(s=> hl.observe(s));
+
+    // 主題切換（跟隨系統 + 手動覆蓋）
+    const btn = document.getElementById('theme');
+    const applyScheme = (mode)=>{ document.documentElement.style.colorScheme = mode; localStorage.setItem('scheme', mode); };
+    const stored = localStorage.getItem('scheme');
+    if(stored){ applyScheme(stored); }
+    btn.addEventListener('click', ()=>{
+      const current = getComputedStyle(document.documentElement).colorScheme || 'dark';
+      applyScheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // 卡片跟隨滑鼠微傾（Apple 式細節）
+    const cards = document.querySelectorAll('.hover-tilt');
+    cards.forEach(card=>{
+      card.addEventListener('pointermove', (e)=>{
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left)/r.width - .5;
+        const y = (e.clientY - r.top)/r.height - .5;
+        card.style.transform = `rotateX(${(-y*2)}deg) rotateY(${(x*3)}deg) translateY(-2px)`;
+      });
+      card.addEventListener('pointerleave', ()=> card.style.transform = '');
+    });
+
+    // 捲動時縮小導覽列
+    window.addEventListener('scroll', ()=>{
+      const nav = document.querySelector('header.nav');
+      const y = window.scrollY;
+      nav.style.padding = y > 8 ? '4px 0' : '';
+    });
+  </script>
+</body>
+</html>
